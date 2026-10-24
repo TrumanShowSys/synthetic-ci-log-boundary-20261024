@@ -1,0 +1,14 @@
+name: Synthetic log masking check
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Observe masking of a synthetic value
+        env:
+          SYN_TOKEN: ${{ secrets.SYNTHETIC_REGISTRY_TOKEN }}
+        run: |
+          node -e 'const x = process.env.SYN_TOKEN; if (!x) process.exit(2); console.log("raw=" + x); console.log("url=" + encodeURIComponent(x));'
